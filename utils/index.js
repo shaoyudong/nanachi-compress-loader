@@ -1,5 +1,6 @@
 const uglifyJS = require('uglify-es');
 const cleanCSS = require('clean-css');
+const minifier = require('html-minifier').minify;
 
 const compress = {
     js: function (code) {
@@ -20,10 +21,18 @@ const compress = {
         return result.styles;
     },
     ux: function (code) {
-        return code;
+        return this.html.call(this, code);
     },
-    wxml: function (code) {
-        //TODO: comporess xml file;
+    html: function (code) {
+        code = minifier(code, {
+            collapseWhitespace: true,
+            minifyCSS: true,
+            minifyJS: function(code) {
+                return compress.js(code);
+            },
+            removeScriptTypeAttributes: true,
+            removeTagWhitespace: true
+        });
         return code;
     },
     json: function (code) {
