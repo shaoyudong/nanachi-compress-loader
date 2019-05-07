@@ -25,13 +25,15 @@ const compress = {
     },
     html: function (code) {
         code = minifier(code, {
+            keepClosingSlash: true,
+            html5: false,
+            caseSensitive: true,
             collapseWhitespace: true,
             minifyCSS: true,
             minifyJS: function(code) {
                 return compress.js(code);
             },
-            removeScriptTypeAttributes: true,
-            removeTagWhitespace: true
+            removeScriptTypeAttributes: true
         });
         return code;
     },
